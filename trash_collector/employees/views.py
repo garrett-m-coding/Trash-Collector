@@ -84,3 +84,22 @@ def edit_profile(request):
             'logged_in_employee': logged_in_employee
         }
         return render(request, 'employees/edit_profile.html', context)
+
+@login_required
+def confirm_charge(request):
+    today = date.today()
+    logged_in_user = request.user
+    logged_in_employee = Employee.objects.get(user=logged_in_user)
+    if request.method == "POST":
+        customer.date_of_last_pickup = today
+        customer.balance += 20
+        customer.save()
+        return HttpResponseRedirect(reverse('employees:confirm_charge'))
+    else:
+        return render(request, 'employees/confirm_charge.html')
+        # ?use filtered customer list for customer?
+        # take the client status weekly and one time clients->
+        # confirm client's trash picked up
+        # update client's latest pickup date
+        # charge trash pickup client $20
+        

@@ -1,0 +1,16 @@
+{% extends 'employees\employee_base.html' %}
+
+{% block title %} Trash Pick-up Confirmation {% endblock %}
+
+{% block header %} Please Confirm Trash Pick-up for Customer Charge {% endblock %}
+
+{% block content %}
+"{{customer.name}}"
+<form action="{% url 'employees:confirm_charge' %}" method="post">
+    {% csrf_token %}
+    "Boob"<br />
+    Want to Confirm: <input type="text" value="yes or no"><br />
+    <input type="submit" value="confirm">
+</form>
+
+{% endblock %}

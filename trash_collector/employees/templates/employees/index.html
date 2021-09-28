@@ -9,7 +9,7 @@
     <br />
     Your pickups for today are:
     {% for customer in status_weekly %}
-    <li>{{customer}}</li>
+    <li>{{customer.name}} - <a href="{% url 'employees:confirm_charge' %}">*confirm trash pick-up*</a></li>
     {% endfor %}
     <br />
     Your one time pickups for today are:
