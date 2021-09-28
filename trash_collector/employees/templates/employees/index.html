@@ -4,7 +4,18 @@
 
 {% block content %}
   {% if user.is_authenticated %}
-    Hello Employee {{ logged_in_employee.name }}!
+    Hello {{ logged_in_employee.name }}!
+    <br />
+    <br />
+    Your pickups for today are:
+    {% for customer in status_weekly %}
+    <li>{{customer}}</li>
+    {% endfor %}
+    <br />
+    Your one time pickups for today are:
+    {% for customer in status_one_time %}
+    <li>{{customer}}</li>
+    {% endfor %}
   {% else %}
     <p>You are at the employee index, but you are not logged in.</p>
     <a href="{% url 'login' %}">Log In</a>

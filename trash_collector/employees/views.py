@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import date
+import calendar
 
 
 # Create your views here.
@@ -15,8 +16,8 @@ from datetime import date
 
 def index(request):
     # This line will get the Customer model from the other app, it can now be used to query the db for Customers
-    # Customer = apps.get_model('customers.Customer')
-    # return render(request, 'employees/index.html')
+    Customer = apps.get_model('customers.Customer')
+    
 
     # The following line will get the logged-in user (if there is one) within any view function
     logged_in_user = request.user
@@ -25,10 +26,31 @@ def index(request):
         logged_in_employee = Employee.objects.get(user=logged_in_user)
 
         today = date.today()
+        today_weekday = calendar.day_name[today.weekday()]
         
+        same_zip_code = Customer.objects.filter(zip_code = logged_in_employee.zip_code)
+
+        same_pickup_day = same_zip_code.filter(weekly_pickup = today_weekday)
+
+        one_time = same_zip_code.filter(one_time_pickup = today)
+
+        status_weekly = same_pickup_day.exclude(suspend_start__lt = today) and same_pickup_day.exclude(suspend_end__gt = today)
+
+        status_one_time = one_time.exclude(suspend_start__lt = today) and one_time.exclude(suspend_end__gt = today)
+
+        #   Attempt to create a method to clean up/ reduce code for filtering
+        
+        # def filter_customers(list_of_customers, property, comparison):
+        #     new_list = list_of_customers.filter(property = comparison)
+        #     return new_list
+
+        # same_zip_code = filter_customers(Customer.objects, zip_code, )
+
         context = {
             'logged_in_employee': logged_in_employee,
-            'today': today
+            'today': today,
+            'status_weekly': status_weekly,
+            'status_one_time': status_one_time
         }
         return render(request, 'employees/index.html', context)
     except ObjectDoesNotExist:
