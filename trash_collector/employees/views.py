@@ -8,7 +8,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from datetime import date
 import calendar
 
-
 # Create your views here.
 
 # TODO: Create a function for each path created in employees/urls.py. Each will need a template as well.
@@ -86,17 +85,22 @@ def edit_profile(request):
         return render(request, 'employees/edit_profile.html', context)
 
 @login_required
-def confirm_charge(request):
+def confirm_charge(request, customer_id):
+    Customer = apps.get_model('customers.Customer')
+    customer_to_update = Customer.objects.get(id=customer_id)
     today = date.today()
     logged_in_user = request.user
     logged_in_employee = Employee.objects.get(user=logged_in_user)
     if request.method == "POST":
-        customer.date_of_last_pickup = today
-        customer.balance += 20
-        customer.save()
-        return HttpResponseRedirect(reverse('employees:confirm_charge'))
+        customer_to_update.date_of_last_pickup = today
+        customer_to_update.balance += 20
+        customer_to_update.save()
+        return HttpResponseRedirect(reverse('employees:index'))
     else:
-        return render(request, 'employees/confirm_charge.html')
+        context = {
+            'customer_to_update': customer_to_update
+        }
+        return render(request, 'employees/confirm_charge.html', context)
         # ?use filtered customer list for customer?
         # take the client status weekly and one time clients->
         # confirm client's trash picked up
