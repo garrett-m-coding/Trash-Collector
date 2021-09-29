@@ -4,3 +4,41 @@
     <a class="nav-item nav-link" href="{% url 'employees:index' %}">Home</a>
     <a class="nav-item nav-link" href="{% url 'employees:edit_profile' %}">Edit Profile</a>
 {% endblock %}
+
+{% block button_source %}
+  <title>Bootstrap Example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}
+
+{% block employee %}
+<div class="container">
+    <div class="row">
+      <div class="col-3" align="center">
+        <br />
+        <br />        
+            <div class="dropdown">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                  Weekday Pick-up Filter
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{% url 'employees:Monday_filter' %}">Monday</a>
+                  <a class="dropdown-item" href="{% url 'employees:Tuesday_filter' %}">Tuesday</a>
+                  <a class="dropdown-item" href="{% url 'employees:Wednesday_filter' %}">Wednesday</a>
+                  <a class="dropdown-item" href="{% url 'employees:Thursday_filter' %}">Thursday</a>
+                  <a class="dropdown-item" href="{% url 'employees:Friday_filter' %}">Friday</a>
+                </div>
+            </div>
+      </div>
+      <div class="col-9" align="center">
+        <br />
+        <br />
+        <h1>{% block header %}{% endblock %}</h1>
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+</div>
+{% endblock %}

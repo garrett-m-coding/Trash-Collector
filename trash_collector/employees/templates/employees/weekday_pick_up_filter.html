@@ -1,0 +1,9 @@
+{% extends 'employees\employee_base.html' %}
+
+{% block title %}{% block header %} Pick-ups for {{ weekday }}: {% endblock %}{% endblock %}
+
+{% block content %}
+    {% for customer in weekday_filter %}
+        <li> {{customer.name}} </li>
+    {% endfor %}
+{% endblock %}

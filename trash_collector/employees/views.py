@@ -12,7 +12,7 @@ import calendar
 
 # TODO: Create a function for each path created in employees/urls.py. Each will need a template as well.
 
-
+@login_required
 def index(request):
     # This line will get the Customer model from the other app, it can now be used to query the db for Customers
     Customer = apps.get_model('customers.Customer')
@@ -95,4 +95,54 @@ def confirm_charge(request, customer_id):
             'customer_to_update': customer_to_update
         }
         return render(request, 'employees/confirm_charge.html', context)
-        
+
+@login_required
+def Monday_filter(request):
+    Customer = apps.get_model('customers.Customer')
+    weekday_filter = Customer.objects.filter(weekly_pickup = "Monday")
+    print(weekday_filter)
+    context = {
+        'weekday_filter': weekday_filter,
+        'weekday': 'Monday',
+    }
+    return render(request, 'employees/weekday_pick_up_filter.html', context)
+
+@login_required
+def Tuesday_filter(request):
+    Customer = apps.get_model('customers.Customer')
+    weekday_filter = Customer.objects.filter(weekly_pickup = "Tuesday")
+    context = {
+        'weekday_filter': weekday_filter,
+        'weekday': 'Tuesday',
+    }
+    return render(request, 'employees/weekday_pick_up_filter.html', context)
+
+@login_required
+def Wednesday_filter(request):
+    Customer = apps.get_model('customers.Customer')
+    weekday_filter = Customer.objects.filter(weekly_pickup = "Wednesday")
+    context = {
+        'weekday_filter': weekday_filter,
+        'weekday': 'Wednesday',
+    }
+    return render(request, 'employees/weekday_pick_up_filter.html', context)
+
+@login_required
+def Thursday_filter(request):
+    Customer = apps.get_model('customers.Customer')
+    weekday_filter = Customer.objects.filter(weekly_pickup = "Thursday")
+    context = {
+        'weekday_filter': weekday_filter,
+        'weekday': 'Thursday',
+    }
+    return render(request, 'employees/weekday_pick_up_filter.html', context)   
+
+@login_required
+def Friday_filter(request):
+    Customer = apps.get_model('customers.Customer')
+    weekday_filter = Customer.objects.filter(weekly_pickup = "Friday")
+    context = {
+        'weekday_filter': weekday_filter,
+        'weekday': 'Friday',
+    }
+    return render(request, 'employees/weekday_pick_up_filter.html', context)             
