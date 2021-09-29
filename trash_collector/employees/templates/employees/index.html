@@ -8,13 +8,14 @@
     <br />
     <br />
     Your pickups for today are:
-    {% for customer in status_weekly %}
+    {% for customer in incomplete_pick_up %}
     <li>{{customer.name}} - <a href="{% url 'employees:confirm_charge' customer.id %}">*confirm trash pick-up*</a></li>
     {% endfor %}
     <br />
-    Your one time pickups for today are:
-    {% for customer in status_one_time %}
-    <li>{{customer}}</li>
+    <br />
+    Your completed pickups are:
+    {% for customer in completed_pick_up %}
+    <li>{{customer.name}}</li>
     {% endfor %}
   {% else %}
     <p>You are at the employee index, but you are not logged in.</p>

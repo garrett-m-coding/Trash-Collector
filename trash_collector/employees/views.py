@@ -33,23 +33,19 @@ def index(request):
 
         one_time = same_zip_code.filter(one_time_pickup = today)
 
-        status_weekly = same_pickup_day.exclude(suspend_start__lt = today) and same_pickup_day.exclude(suspend_end__gt = today)
-
-        status_one_time = one_time.exclude(suspend_start__lt = today) and one_time.exclude(suspend_end__gt = today)
-
-        #   Attempt to create a method to clean up/ reduce code for filtering
+        status_weekly = same_pickup_day.exclude(suspend_start__lt = today) | same_pickup_day.exclude(suspend_end__gt = today)
         
-        # def filter_customers(list_of_customers, property, comparison):
-        #     new_list = list_of_customers.filter(property = comparison)
-        #     return new_list
+        status_one_time = one_time.exclude(suspend_start__lt = today) | one_time.exclude(suspend_end__gt = today)
 
-        # same_zip_code = filter_customers(Customer.objects, zip_code, )
+        incomplete_pick_up = status_weekly.exclude(date_of_last_pickup = today) | status_one_time.exclude(date_of_last_pickup = today)
+
+        completed_pick_up = status_weekly.filter(date_of_last_pickup = today) | status_one_time.filter(date_of_last_pickup = today)
 
         context = {
             'logged_in_employee': logged_in_employee,
             'today': today,
-            'status_weekly': status_weekly,
-            'status_one_time': status_one_time
+            'incomplete_pick_up':incomplete_pick_up,
+            'completed_pick_up': completed_pick_up
         }
         return render(request, 'employees/index.html', context)
     except ObjectDoesNotExist:
@@ -89,8 +85,6 @@ def confirm_charge(request, customer_id):
     Customer = apps.get_model('customers.Customer')
     customer_to_update = Customer.objects.get(id=customer_id)
     today = date.today()
-    logged_in_user = request.user
-    logged_in_employee = Employee.objects.get(user=logged_in_user)
     if request.method == "POST":
         customer_to_update.date_of_last_pickup = today
         customer_to_update.balance += 20
@@ -101,9 +95,4 @@ def confirm_charge(request, customer_id):
             'customer_to_update': customer_to_update
         }
         return render(request, 'employees/confirm_charge.html', context)
-        # ?use filtered customer list for customer?
-        # take the client status weekly and one time clients->
-        # confirm client's trash picked up
-        # update client's latest pickup date
-        # charge trash pickup client $20
         
