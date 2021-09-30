@@ -17,8 +17,11 @@
         {% if today <= logged_in_customer.one_time_pickup and logged_in_customer.date_of_last_pickup != logged_in_customer.one_time_pickup %}
           You have an extra pickup scheduled for {{ logged_in_customer.one_time_pickup }}
         {% endif %}
+
+        {% if logged_in_customer.one_time_pickup == Null %}
+        You have no scheduled one time pickup
         
-        {% if logged_in_customer.date_of_last_pickup == logged_in_customer.one_time_pickup %}
+        {% elif logged_in_customer.date_of_last_pickup == logged_in_customer.one_time_pickup %}
         Your extra pickup scheduled for {{ logged_in_customer.one_time_pickup }} was completed
         {% endif %}
         <br />
