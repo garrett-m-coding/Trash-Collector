@@ -14,13 +14,25 @@
         Your Weekly Pickup Day: {{ logged_in_customer.weekly_pickup }}
         <br />
         <br />
-        {% if logged_in_customer.one_time_pickup %}
+        {% if today <= logged_in_customer.one_time_pickup and logged_in_customer.date_of_last_pickup != logged_in_customer.one_time_pickup %}
           You have an extra pickup scheduled for {{ logged_in_customer.one_time_pickup }}
+        {% endif %}
+        
+        {% if logged_in_customer.date_of_last_pickup == logged_in_customer.one_time_pickup %}
+        Your extra pickup scheduled for {{ logged_in_customer.one_time_pickup }} was completed
         {% endif %}
         <br />
         <br />
+        {% if today < logged_in_customer.suspend_start %}
+          Your pickups are suspended from {{ logged_in_customer.suspend_start }} - {{ logged_in_customer.suspend_end }}
+        {% endif %}
+
         {% if today > logged_in_customer.suspend_start and today < logged_in_customer.suspend_end %}
           Your pickups are suspended until {{ logged_in_customer.suspend_end }}
+        {% endif %}
+
+        {% if today > logged_in_customer.suspend_end %}
+        Your pickup suspension ended {{ logged_in_customer.suspend_end }}
         {% endif %}
 
   {% else %}
